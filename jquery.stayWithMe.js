@@ -22,7 +22,6 @@
 		$('body').mouseleave(function(e){
 			if( e.offsetY <= 0 || e.clientY <= 0 ){
                 sWM.jump();
-                console.log(e.view);
                 var top = 10, left = 10, height = sWM.height(), width = sWM.width(), 
 					paddingTop = parseInt(sWM.css('padding-top')), paddingLeft = parseInt(sWM.css('padding-left')); 
 				if(e.view.innerHeight > (height + 2*paddingTop)){
