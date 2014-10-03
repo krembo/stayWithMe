@@ -27,5 +27,5 @@ You can also provide additional options (style only at this moment).
 $('#myDiv').stayWithme({style: {width: 500, height: 200, backgroundColor: 'black'} });
 ```
 
-Generally all that works with jQuery .css() function can be passed. 
+Generally all that works with jQuery .css() function can be passed.
 Just don't change the position parameter, it'll break the positioning ;)
