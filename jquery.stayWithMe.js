@@ -2,14 +2,17 @@
  
     $.fn.stayWithMe = function( options ) {
 		var sWM = this;
+		$('body').append(sWM);
         var settings = $.extend(true, {
             style: {
                 color: "#fff",
                 backgroundColor: "#4679bd",
                 borderRadius: 10,
                 padding: '20px 15px',
-                width: 200,
-                height: 100,
+                width: sWM.width(),
+                height: sWM.height(),
+				minWidth: 200,
+				minHeight: 100,
                 position: 'absolute'
             }
         }, options );
