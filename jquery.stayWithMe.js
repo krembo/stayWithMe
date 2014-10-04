@@ -1,26 +1,38 @@
 (function ( $ ) {
  
     $.fn.stayWithMe = function( options ) {
-		var sWM = this;
-		$('body').append(sWM);
-        var settings = $.extend(true, {
+		var sWM = this, origWidth = sWM.width(), origHeight = sWM.height();
+		var settings = $.extend(true, {
+			screen: false,
+			screenStyle: {
+				background: '#fff',
+				opacity: 0.8,
+				zIndex: 10
+			},
             style: {
                 color: "#fff",
                 backgroundColor: "#4679bd",
                 borderRadius: 10,
                 padding: '20px 15px',
-                width: sWM.width(),
-                height: sWM.height(),
+                width: origWidth,
+                height: origHeight,
 				minWidth: 200,
 				minHeight: 100,
-                position: 'absolute'
+                position: 'absolute',
+				zIndex: 11
             }
         }, options );
+		$('body').append(sWM);
+		if(settings.screen){
+			$('body').append('<div id="swm-screen" style="width:'+$('html').width()+'px;height:'+$('html').height()+'px;position:absolute;background:'+
+				settings.screenStyle.background+';opacity:'+settings.screenStyle.opacity+';z-index:'
+				+settings.screenStyle.zIndex+';display:none;top:0;left:0;"></div>');
+		}
         this.hide()
             .css(settings.style)
             .append('<span class="swm-close" style="position: absolute; top: 5px; right: 10px; cursor: pointer;">close</span>');
         $('.swm-close').click(function(){
-                sWM.unjump(); 
+                sWM.crouch(); 
             });
 		$('body').mouseleave(function(e){
 			if( e.offsetY <= 0 || e.clientY <= 0 ){
@@ -41,10 +53,12 @@
 			}
 		});		
 		this.jump = function(){
-			this.show();
+			this.show().data('show', true);
+			$('#swm-screen').show();
 		};
-        this.unjump = function(){
-			this.hide();
+        this.crouch = function(){
+			this.hide().data('show', false);
+			$('#swm-screen').hide();
 		};
         return this;	
     };
