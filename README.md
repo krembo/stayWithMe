@@ -19,13 +19,32 @@ Let's say you've added a div like this one:
 
 Then you just need to call stayWithMe function in following way and you good.
 ```JavaScript
-$('#myDiv').stayWithme();
+$('#myDiv').stayWithMe();
 ```
 
-You can also provide additional options (style only at this moment).
+You can also provide additional options.
 ```JavaScript
-$('#myDiv').stayWithme({style: {width: 500, height: 200, backgroundColor: 'black'} });
+$('#myDiv').stayWithMe({style: {width: 500, height: 200, backgroundColor: 'black'} });
 ```
 
-Generally all that works with jQuery .css() function can be passed.
+Generally all that works with jQuery .css() function can be passed.<br />
 Just don't change the position parameter, it'll break the positioning ;)
+
+Options
+=======
+
+As for now you have 3 options to change:
+<ol>
+<li>style</li>
+<li>screen</li>
+<li>screenStyle</li>
+</ol>
+
+<p><i>style</i> is for styling your pop-up block.</p>
+<p><i>screen</i> is a boolean parameter taking <i>true</i> or <i>false</i>, <i>false</i> by default.</p>
+<p><i>screenStyle</i> is object that contains parameters for screen styling, 
+taking 3 CSS parameters - <i>background</i>, <i>opacity</i> and <i>zIndex</i>.</p>
+
+```JavaScript
+$('#myDiv').stayWithMe({screen: true, screenStyle: {background:'black', opacity: 0.5}});
+```
