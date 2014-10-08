@@ -20,7 +20,8 @@
 				minHeight: 100,
                 position: 'absolute',
 				zIndex: 11
-            }
+            },
+			moveOnScroll: false
         }, options );
 		$('body').append(sWM);
 		if(settings.screen){
@@ -34,24 +35,34 @@
         $('.swm-close').click(function(){
                 sWM.crouch(); 
             });
+		this.recalculate = function(){
+			var top = 10, left = 10, height = sWM.height(), width = sWM.width(), 
+					paddingTop = parseInt(sWM.css('padding-top')), paddingLeft = parseInt(sWM.css('padding-left')); 
+			if(window.innerHeight > (height + 2*paddingTop)){
+				top = Math.floor((window.innerHeight - height - 2*paddingTop)/2) + pageYOffset;
+			} else {
+				height = window.innerHeight-20-2*paddingTop;
+			}
+			if(window.innerWidth > (width + 2*paddingLeft)){
+				left = Math.floor((window.innerWidth - width - 2*paddingLeft)/2) + pageXOffset;
+			} else {
+				width = window.innerWidth-20-2*paddingLeft;
+			}
+            sWM.css({top: top, left: left, width: width, height: height});
+		};
 		$('body').mouseleave(function(e){
 			if( e.offsetY <= 0 || e.clientY <= 0 ){
                 sWM.jump();
-                var top = 10, left = 10, height = sWM.height(), width = sWM.width(), 
-					paddingTop = parseInt(sWM.css('padding-top')), paddingLeft = parseInt(sWM.css('padding-left')); 
-				if(e.view.innerHeight > (height + 2*paddingTop)){
-					top = Math.floor((e.view.innerHeight - height - 2*paddingTop)/2) + pageYOffset;
-				} else {
-					height = e.view.innerHeight-20-2*paddingTop;
-				}
-				if(e.view.innerWidth > (width + 2*paddingLeft)){
-					left = Math.floor((e.view.innerWidth - width - 2*paddingLeft)/2) + pageXOffset;
-				} else {
-					width = e.view.innerWidth-20-2*paddingLeft;
-				}
-                sWM.css({top: top, left: left, width: width, height: height});
+                sWM.recalculate();
 			}
-		});		
+		});
+		if(settings.moveOnScroll){
+			$(document).scroll(function(e){
+				if(sWM.data('show')){
+					sWM.recalculate();
+				}
+			});		
+		}
 		this.jump = function(){
 			this.show().data('show', true);
 			$('#swm-screen').show();
