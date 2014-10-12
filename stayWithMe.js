@@ -18,45 +18,45 @@ var stayWithMe = function(elem, options){
 				minWidth: '200px',
 				minHeight: '100px',
                 position: 'absolute',
-				zIndex: 11
+				zIndex: 11,
+				display: 'none'
             },
 			moveOnScroll: false
         };
-		for(s in options){
-			if(options[s].constructor == Object){
-				for(j in options[s]){
-					settings[s][j] = options[s][j];
+		var setStyle = function(elem, style){ for (var prop in style) {elem.style[prop] = style[prop];} };
+		var mergeObjects = function(primary, changes){
+			for(s in changes){
+				if(changes[s].constructor == Object){
+					for(j in changes[s]){
+						primary[s][j] = changes[s][j];
+					}
+				} else {
+					primary[s] = changes[s];
 				}
-			} else {
-				settings[s] = options[s];
 			}
-		}
-   
+			return primary;
+		};
+		settings = mergeObjects(settings, options);
+		
 		document.body.appendChild(sWM);
 		if(settings.screen){
 			swmScreen = document.createElement('div');
 			swmScreen.id = 'swm-screen';
-			swmScreen.style.width = document.documentElement.offsetWidth+'px';
-			swmScreen.style.height = document.documentElement.offsetHeight+'px';
-			swmScreen.style.position = 'absolute';
-			swmScreen.style.display = 'none'; 
-			swmScreen.style.top = 0;
-			swmScreen.style.left = 0;
-			for(i in settings.screenStyle){
-				swmScreen.style[i] = settings.screenStyle[i];
-			}
+			setStyle( swmScreen, mergeObjects({
+				width: document.documentElement.offsetWidth+'px',
+				height: document.documentElement.offsetHeight+'px',
+				position: 'absolute', display: 'none', 
+				top: 0, left: 0}, 
+					settings.screenStyle) 
+			);
 			document.body.appendChild(swmScreen);
 		}
-		sWM.style.display = 'none';
-		for(i in settings.style){
-			sWM.style[i] = settings.style[i];
-		}
+		setStyle(sWM, settings.style);
+		
         swmScreenClose = document.createElement('span');
 		swmScreenClose.classes += 'swm-close';
-		swmScreenClose.style.position = 'absolute';
-		swmScreenClose.style.top = '5px';
-		swmScreenClose.style.right = '10px';
-		swmScreenClose.style.cursor = 'pointer';
+		setStyle(swmScreenClose, 
+				{ position: 'absolute',  top: '5px', 	right: '10px',	cursor: 'pointer' }); 
 		swmScreenClose.textContent = 'close';
 		swmScreenClose.innerText = 'close';
 		sWM.appendChild(swmScreenClose);  
@@ -73,10 +73,10 @@ var stayWithMe = function(elem, options){
 			} else {
 				width = window.innerWidth-20;
 			}
-            sWM.style.top = top+'px';
-			sWM.style.left = left+'px';
-			sWM.style.width = (width-(2*paddingLeft))+'px';
-			sWM.style.height = (height-(2*paddingTop))+'px';
+			setStyle(sWM, {
+				top: top+'px', left: left+'px', 
+				width: (width-(2*paddingLeft))+'px', height: (height-(2*paddingTop))+'px'}
+			);
 		};
 		document.body.addEventListener('mouseleave',function(e){
 			if( e.offsetY <= 0 || e.clientY <= 0 ){
@@ -101,4 +101,5 @@ var stayWithMe = function(elem, options){
 			sWM.swmShow = false;
 			if(swmScreen) swmScreen.style.display = 'none';
 		};
+		
 };
